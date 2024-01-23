@@ -8,7 +8,7 @@ Para utilizar o **Mobi Request**, basta incluir o script em seu projeto. Você p
 
 ```html
 <!-- Incluindo via CDN -->
-<script src="https://cdn.example.com/mobi-request.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/jandersongarcia/mobiRequest@v1.0.0/mobi.request.min.js"></script>
 ```
 
 ## Uso Básico
