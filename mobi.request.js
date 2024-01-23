@@ -1,13 +1,3 @@
-// Exemplo de uso via POST:
-// mobi.post('https://api.example.com/create', { name: 'John', age: 30 })
-//     .then(response => console.log(response))
-//     .catch(error => console.error(error));
-//
-// Exemplo de uso via POST:
-// mobi.post('https://api.example.com/create', { name: 'John', age: 30 })
-//     .then(response => console.log(response))
-//     .catch(error => console.error(error));
-
 const mobi = {
     // Função genérica para fazer requisições HTTP
     request: function (url, options = {}) {
@@ -17,10 +7,9 @@ const mobi = {
         const requestOptions = {
             method,
             headers: {
-                'Content-Type': 'application/json',
                 ...headers,
             },
-            body: data ? JSON.stringify(data) : undefined,
+            body: data,
         };
 
         // Retorna uma Promise que envolve a chamada do fetch
@@ -50,11 +39,20 @@ const mobi = {
 
     // Função específica para requisições HTTP do tipo POST
     post: function (url, data, options = {}) {
-        return this.request(url, { method: 'POST', data, ...options });
+        const { hasImage = false, ...otherOptions } = options;
+
+        // Verifica se data é um objeto FormData
+        if (data instanceof FormData) {
+            return this.request(url, { method: 'POST', data, ...otherOptions });
+        } else {
+            // Se data for um objeto JSON, converte para string e configura a requisição como 'application/json'
+            const jsonBody = JSON.stringify(data);
+            return this.request(url, { method: 'POST', data: jsonBody, ...otherOptions });
+        }
     },
 
     // Função específica para requisições HTTP do tipo GET
     get: function (url, options = {}) {
         return this.request(url, { method: 'GET', ...options });
-    }
+    },
 };

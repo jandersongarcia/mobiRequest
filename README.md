@@ -29,6 +29,32 @@ mobi.post('https://api.example.com/create', { name: 'John', age: 30 })
     .catch(error => console.error(error));
 ```
 
+### Realizando uma requisição POST
+### Capturando e enviando todos os dados do formulário
+```javascript
+// Substitua 'myForm' pelo ID do seu formulário
+const formElement = document.getElementById('myForm');
+mobi.postForm('https://api.example.com/submit', formElement)
+    .then(response => console.log(response))
+    .catch(error => console.error(error));
+```
+
+### Realizando uma requisição POST com envio de imagem
+```javascript
+const formData = new FormData();
+formData.append('name', 'John');
+formData.append('age', 30);
+// Substitua "fileInputElement" pelo seu elemento de input de arquivo
+formData.append('image', fileInputElement.files[0]);
+
+// Se tiver uma imagem, sete hasImage para true
+const hasImage = fileInputElement.files[0] ? true : false;
+
+mobi.post('https://api.example.com/create', formData, { hasImage })
+    .then(response => console.log(response))
+    .catch(error => console.error(error));
+```
+
 ## Funções
 
 ### `request(url, options)`
