@@ -21,7 +21,7 @@ mobi.get('https://api.example.com/data')
     .catch(error => console.error(error));
 ```
 
-### Realizando uma requisição POST
+### Realizando uma requisição POST simples
 
 ```javascript
 mobi.post('https://api.example.com/create', { name: 'John', age: 30 })
@@ -29,8 +29,7 @@ mobi.post('https://api.example.com/create', { name: 'John', age: 30 })
     .catch(error => console.error(error));
 ```
 
-### Realizando uma requisição POST
-### Capturando e enviando todos os dados do formulário
+### Realizando uma requisição POST capturando todos os dados do formulário
 ```javascript
 // Substitua 'myForm' pelo ID do seu formulário
 const formElement = document.getElementById('myForm');
