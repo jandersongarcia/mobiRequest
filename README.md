@@ -33,7 +33,8 @@ mobi.post('https://api.example.com/create', { name: 'John', age: 30 })
 ```javascript
 // Substitua 'myForm' pelo ID do seu formulário
 const formElement = document.getElementById('myForm');
-mobi.postForm('https://api.example.com/submit', formElement)
+const formData = new FormData(formElement);
+mobi.postForm('https://api.example.com/submit', formData)
     .then(response => console.log(response))
     .catch(error => console.error(error));
 ```

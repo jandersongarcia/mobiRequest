@@ -1,3 +1,8 @@
+/*!
+ * MobiRequest v1.1.0
+ * By Janderson Garcia
+ * Documentation (https://github.com/jandersongarcia/mobiRequest)
+ */
 const mobi = {
     // Função genérica para fazer requisições HTTP
     request: function (url, options = {}) {
