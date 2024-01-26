@@ -43,15 +43,22 @@ mobi.post('https://api.example.com/create', { name: 'John', age: 30 },
 
 ```javascript
 // Replace 'myForm' with the ID of your form
-const formElement = document.getElementById('myForm');
-mobi.postForm('https://api.example.com/submit', formElement,
-    function(response) {
-        console.log(response);
-    },
-    function(error) {
-        console.error(error);
-    }
-);
+const sendPost = document.getElementById('myForm');
+
+sendPost.addEventListener('submit', (e) => {
+    e.preventDefault();
+    
+    const formData = new FormData(sendPost);
+
+    mobi.post('https://api.example.com/submit', formData, function (response) {
+        // Lógica a ser executada em caso de sucesso
+        console.log('POST Success:', response);
+    }, function (error) {
+        // Lógica a ser executada em caso de erro
+        console.error('POST Error:', error);
+    });
+
+});
 ```
 
 ### Making a POST Request with Image Upload
