@@ -1,87 +1,113 @@
-# Mobi Request
+# Mobi HTTP Requests
 
-O **Mobi Request** é uma biblioteca JavaScript que fornece funções convenientes para realizar requisições HTTP de forma assíncrona. A biblioteca utiliza o método `fetch` para facilitar o trabalho com APIs e serviços web.
+**Mobi HTTP Requests** is a JavaScript library that provides convenient functions for making asynchronous HTTP requests. The library utilizes the XMLHttpRequest object to simplify working with APIs and web services.
 
-## Instalação
+## Installation
 
-Para utilizar o **Mobi Request**, basta incluir o script em seu projeto. Você pode baixar diretamente ou incluir via CDN:
+To use **Mobi HTTP Requests**, simply include the script in your project. You can either download it directly or include it via CDN:
 
 ```html
-<!-- Incluindo via CDN -->
-<script src="https://cdn.jsdelivr.net/gh/jandersongarcia/mobiRequest@v1.0.0/mobi.request.min.js"></script>
+<!-- Including via CDN -->
+<script src="https://cdn.jsdelivr.net/gh/jandersongarcia/mobiRequest@v2.0.0/mobi.request.min.js"></script>
 ```
 
-## Uso Básico
+## Basic Usage
 
-### Realizando uma requisição GET
+### Making a GET Request
 
 ```javascript
-mobi.get('https://api.example.com/data')
-    .then(response => console.log(response))
-    .catch(error => console.error(error));
+mobi.get('https://api.example.com/data',
+    function(response) {
+        console.log(response);
+    },
+    function(error) {
+        console.error(error);
+    }
+);
 ```
 
-### Realizando uma requisição POST simples
+### Making a Simple POST Request
 
 ```javascript
-mobi.post('https://api.example.com/create', { name: 'John', age: 30 })
-    .then(response => console.log(response))
-    .catch(error => console.error(error));
+mobi.post('https://api.example.com/create', { name: 'John', age: 30 },
+    function(response) {
+        console.log(response);
+    },
+    function(error) {
+        console.error(error);
+    }
+);
 ```
 
-### Realizando uma requisição POST capturando todos os dados do formulário
+### Making a POST Request by Capturing Form Data
+
 ```javascript
-// Substitua 'myForm' pelo ID do seu formulário
+// Replace 'myForm' with the ID of your form
 const formElement = document.getElementById('myForm');
-const formData = new FormData(formElement);
-mobi.postForm('https://api.example.com/submit', formData)
-    .then(response => console.log(response))
-    .catch(error => console.error(error));
+mobi.postForm('https://api.example.com/submit', formElement,
+    function(response) {
+        console.log(response);
+    },
+    function(error) {
+        console.error(error);
+    }
+);
 ```
 
-### Realizando uma requisição POST com envio de imagem
+### Making a POST Request with Image Upload
+
 ```javascript
 const formData = new FormData();
 formData.append('name', 'John');
 formData.append('age', 30);
-// Substitua "fileInputElement" pelo seu elemento de input de arquivo
+// Replace "fileInputElement" with your file input element
 formData.append('image', fileInputElement.files[0]);
 
-// Se tiver uma imagem, sete hasImage para true
+// If there is an image, set hasImage to true
 const hasImage = fileInputElement.files[0] ? true : false;
 
-mobi.post('https://api.example.com/create', formData, { hasImage })
-    .then(response => console.log(response))
-    .catch(error => console.error(error));
+mobi.post('https://api.example.com/create', formData, 
+    function(response) {
+        console.log(response);
+    },
+    function(error) {
+        console.error(error);
+    },
+    { hasImage }
+);
 ```
 
-## Funções
+## Functions
 
-### `request(url, options)`
+### `get(url, successCallback, errorCallback)`
 
-Realiza uma requisição HTTP genérica com suporte a métodos, cabeçalhos e dados personalizados.
+Make a GET request.
 
-- `url`: URL da requisição.
-- `options`: Objeto contendo opções adicionais como método, cabeçalhos e dados.
+- `url`: URL of the request.
+- `successCallback`: Callback function for successful requests.
+- `errorCallback`: Callback function for errors.
 
-### `get(url, options)`
+### `post(url, formData, successCallback, errorCallback)`
 
-Realiza uma requisição HTTP do tipo GET.
+Make a POST request.
 
-- `url`: URL da requisição.
-- `options`: Objeto contendo opções adicionais.
+- `url`: URL of the request.
+- `formData`: Data to be sent in the request.
+- `successCallback`: Callback function for successful requests.
+- `errorCallback`: Callback function for errors.
 
-### `post(url, data, options)`
+### `put(url, data, successCallback, errorCallback)`
 
-Realiza uma requisição HTTP do tipo POST.
+Make a PUT request.
 
-- `url`: URL da requisição.
-- `data`: Dados a serem enviados na requisição.
-- `options`: Objeto contendo opções adicionais.
+- `url`: URL of the request.
+- `data`: Data to be sent in the request.
+- `successCallback`: Callback function for successful requests.
+- `errorCallback`: Callback function for errors.
 
-## Exemplos Avançados
+## Advanced Examples
 
-### Enviando cabeçalhos personalizados
+### Sending Custom Headers
 
 ```javascript
 const customHeaders = {
@@ -89,29 +115,38 @@ const customHeaders = {
     'Custom-Header': 'value'
 };
 
-mobi.get('https://api.example.com/data', { headers: customHeaders })
-    .then(response => console.log(response))
-    .catch(error => console.error(error));
+mobi.get('https://api.example.com/data', 
+    function(response) {
+        console.log(response);
+    },
+    function(error) {
+        console.error(error);
+    },
+    { headers: customHeaders }
+);
 ```
 
-### Tratando erros específicos
+### Handling Specific Errors
 
 ```javascript
-mobi.post('https://api.example.com/create', { name: 'John', age: 30 })
-    .then(response => console.log(response))
-    .catch(error => {
-        if (error.message.includes('Erro de conexão')) {
-            console.error('Erro de conexão. Verifique sua conexão de rede.');
+mobi.post('https://api.example.com/create', { name: 'John', age: 30 },
+    function(response) {
+        console.log(response);
+    },
+    function(error) {
+        if (error.includes('Network error')) {
+            console.error('Network error. Check your network connection.');
         } else {
-            console.error(error.message);
+            console.error(error);
         }
-    });
+    }
+);
 ```
 
-## Contribuição
+## Contribution
 
-Contribuições são bem-vindas! Sinta-se à vontade para abrir issues ou enviar pull requests para melhorar o **Mobi Request**.
+Contributions are welcome! Feel free to open issues or send pull requests to improve **Mobi HTTP Requests**.
 
-## Licença
+## License
 
-Este projeto é licenciado sob a [Licença MIT](LICENSE).
+This project is licensed under the [MIT License](LICENSE).

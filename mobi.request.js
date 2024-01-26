@@ -1,63 +1,81 @@
 /*!
- * MobiRequest v1.1.0
+ * MobiRequest v2.0.0
  * By Janderson Garcia
  * Documentation (https://github.com/jandersongarcia/mobiRequest)
  */
 const mobi = {
-    // Função genérica para fazer requisições HTTP
-    request: function (url, options = {}) {
-        const { method = 'GET', headers = {}, data } = options;
+    get: function (url, successCallback, errorCallback) {
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', url, true);
 
-        // Configurações da requisição
-        const requestOptions = {
-            method,
-            headers: {
-                ...headers,
-            },
-            body: data,
+        xhr.onload = function () {
+            if (xhr.status >= 200 && xhr.status < 300) {
+                // Sucesso
+                successCallback(xhr.responseText);
+            } else {
+                // Erro
+                errorCallback(xhr.statusText);
+            }
         };
 
-        // Retorna uma Promise que envolve a chamada do fetch
-        return new Promise((resolve, reject) => {
-            fetch(url, requestOptions)
-                .then(response => {
-                    // Verifica se a resposta foi bem-sucedida, caso contrário, lança um erro
-                    if (!response.ok) {
-                        throw new Error(`Erro na requisição ${method}: ${response.statusText}`);
-                    }
-                    // Parseia a resposta como JSON e a retorna
-                    return response.json();
-                })
-                .then(result => resolve(result))
-                .catch(error => {
-                    let errorMessage;
-                    // Trata erro de conexão específico
-                    if (error instanceof TypeError && error.message === 'Failed to fetch') {
-                        errorMessage = 'Erro de conexão. Verifique sua conexão de rede.';
-                    } else {
-                        errorMessage = `Erro na requisição ${method}: ${error.message}`;
-                    }
-                    reject(new Error(errorMessage));
-                });
-        });
+        xhr.onerror = function () {
+            // Erro de rede
+            errorCallback("Erro de rede");
+        };
+
+        // Enviar a requisição
+        xhr.send();
     },
 
-    // Função específica para requisições HTTP do tipo POST
-    post: function (url, data, options = {}) {
-        const { hasImage = false, ...otherOptions } = options;
+    post: function (url, formData, successCallback, errorCallback) {
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', url, true);
 
-        // Verifica se data é um objeto FormData
-        if (data instanceof FormData) {
-            return this.request(url, { method: 'POST', data, ...otherOptions });
-        } else {
-            // Se data for um objeto JSON, converte para string e configura a requisição como 'application/json'
-            const jsonBody = JSON.stringify(data);
-            return this.request(url, { method: 'POST', data: jsonBody, ...otherOptions });
+        xhr.onload = function () {
+            if (xhr.status >= 200 && xhr.status < 300) {
+                // Sucesso
+                successCallback(xhr.responseText);
+            } else {
+                // Erro
+                errorCallback(xhr.statusText);
+            }
+        };
+
+        xhr.onerror = function () {
+            // Erro de rede
+            errorCallback("Erro de rede");
+        };
+
+        // Enviar a requisição
+        xhr.send(formData);
+    },
+
+    put: function (url, data, successCallback, errorCallback) {
+        var xhr = new XMLHttpRequest();
+        xhr.open('PUT', url, true);
+
+        xhr.onload = function () {
+            if (xhr.status >= 200 && xhr.status < 300) {
+                // Sucesso
+                successCallback(xhr.responseText);
+            } else {
+                // Erro
+                errorCallback(xhr.statusText);
+            }
+        };
+
+        xhr.onerror = function () {
+            // Erro de rede
+            errorCallback("Erro de rede");
+        };
+
+        // Criar um objeto FormData e adicionar os dados
+        var formData = new FormData();
+        for (var key in data) {
+            formData.append(key, data[key]);
         }
-    },
 
-    // Função específica para requisições HTTP do tipo GET
-    get: function (url, options = {}) {
-        return this.request(url, { method: 'GET', ...options });
-    },
+        // Enviar a requisição
+        xhr.send(formData);
+    }
 };
